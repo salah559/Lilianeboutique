@@ -9,6 +9,25 @@ export default function Admin(){
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
   
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const isAuth = sessionStorage.getItem('admin_auth');
+      const authTime = sessionStorage.getItem('admin_auth_time');
+      
+      if (isAuth === 'true' && authTime) {
+        const timeElapsed = Date.now() - parseInt(authTime);
+        const oneHour = 60 * 60 * 1000;
+        
+        if (timeElapsed < oneHour) {
+          setAuthed(true);
+        } else {
+          sessionStorage.removeItem('admin_auth');
+          sessionStorage.removeItem('admin_auth_time');
+        }
+      }
+    }
+  }, []);
+  
   async function login(e){
     e.preventDefault();
     setLoading(true);
@@ -24,6 +43,10 @@ export default function Admin(){
       const data = await response.json();
       
       if (response.ok && data.success) {
+        if (typeof window !== 'undefined') {
+          sessionStorage.setItem('admin_auth', 'true');
+          sessionStorage.setItem('admin_auth_time', Date.now().toString());
+        }
         setAuthed(true);
       } else {
         setMessage('كلمة مرور خاطئة');
@@ -33,6 +56,14 @@ export default function Admin(){
     } finally {
       setLoading(false);
     }
+  }
+  
+  function logout() {
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('admin_auth');
+      sessionStorage.removeItem('admin_auth_time');
+    }
+    setAuthed(false);
   }
 
   useEffect(() => {
@@ -99,7 +130,15 @@ export default function Admin(){
       <Header />
       <main className="max-w-7xl mx-auto p-6 min-h-screen">
         <div className="bg-white/10 backdrop-blur-md rounded-xl p-8 border border-brandGold/20">
-          <h2 className="text-3xl font-bold mb-6 text-brandGold">لوحة الأدمن</h2>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-3xl font-bold text-brandGold">لوحة الأدمن</h2>
+            <button 
+              onClick={logout}
+              className="px-4 py-2 bg-red-500/80 hover:bg-red-600 text-white rounded-lg transition-colors font-medium"
+            >
+              تسجيل خروج
+            </button>
+          </div>
           
           <div className="mb-8">
             <div className="flex justify-between items-center mb-4">
