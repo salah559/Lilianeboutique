@@ -14,23 +14,23 @@ html {
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #2C1810 0%, #8B4F39 50%, #E8B4B8 100%);
+  background: linear-gradient(135deg, #4A1E3D 0%, #FFD700 50%, #FFB6C1 100%);
   background-attachment: fixed;
   min-height: 100vh;
-  color: #FFF8F0;
+  color: #FFF5F7;
   direction: rtl;
 }
 
 .glass-dark {
-  background: rgba(44, 24, 16, 0.7);
+  background: rgba(74, 30, 61, 0.8);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(212, 175, 55, 0.2);
+  border: 1px solid rgba(255, 215, 0, 0.3);
 }
 
 .glass-light {
-  background: rgba(255, 248, 240, 0.1);
+  background: rgba(255, 245, 247, 0.15);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(232, 180, 184, 0.3);
+  border: 1px solid rgba(255, 182, 193, 0.4);
 }
 
 @layer utilities {
