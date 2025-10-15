@@ -1,4 +1,5 @@
 import Header from '../components/Header';
+import SEO from '../components/SEO';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useState, useEffect, useMemo } from 'react';
@@ -17,13 +18,16 @@ export default function Home(){
   }, []);
 
   const stars = useMemo(() => {
-    return [...Array(50)].map((_, i) => ({
-      id: i,
-      left: Math.random() * 100,
-      top: Math.random() * 100,
-      duration: 2 + Math.random() * 2,
-      delay: Math.random() * 2,
-    }));
+    const positions = [];
+    for (let i = 0; i < 50; i++) {
+      const seed = i * 7.123;
+      const left = (Math.sin(seed) * 50) + 50;
+      const top = (Math.cos(seed * 1.3) * 50) + 50;
+      const duration = 2 + ((seed % 2) * 2);
+      const delay = (seed % 2);
+      positions.push({ id: i, left, top, duration, delay });
+    }
+    return positions;
   }, []);
 
   const features = [
@@ -35,43 +39,46 @@ export default function Home(){
 
   return (
     <>
+      <SEO 
+        title="الرئيسية" 
+        description="اكتشفي عالماً من الأناقة والرقي مع مجموعتنا الحصرية من الأزياء العصرية للنساء والأطفال" 
+      />
       <Header />
 
       <main className="relative">
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-          {mounted && (
-            <motion.div 
-              className="absolute inset-0 opacity-30"
-              style={{
-                background: `radial-gradient(circle 600px at ${mousePosition.x}px ${mousePosition.y}px, rgba(168, 85, 247, 0.15), transparent 80%)`
-              }}
-            />
-          )}
-
           <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-brandDark to-pink-900/30"></div>
 
           {mounted && (
-            <div className="absolute inset-0">
-              {stars.map((star) => (
-                <motion.div
-                  key={star.id}
-                  className="absolute w-1 h-1 bg-white rounded-full"
-                  style={{
-                    left: `${star.left}%`,
-                    top: `${star.top}%`,
-                  }}
-                  animate={{
-                    scale: [1, 1.5, 1],
-                    opacity: [0.3, 0.8, 0.3],
-                  }}
-                  transition={{
-                    duration: star.duration,
-                    repeat: Infinity,
-                    delay: star.delay,
-                  }}
-                />
-              ))}
-            </div>
+            <>
+              <motion.div 
+                className="absolute inset-0 opacity-30"
+                style={{
+                  background: `radial-gradient(circle 600px at ${mousePosition.x}px ${mousePosition.y}px, rgba(168, 85, 247, 0.15), transparent 80%)`
+                }}
+              />
+              <div className="absolute inset-0">
+                {stars.map((star) => (
+                  <motion.div
+                    key={star.id}
+                    className="absolute w-1 h-1 bg-white rounded-full"
+                    style={{
+                      left: `${star.left}%`,
+                      top: `${star.top}%`,
+                    }}
+                    animate={{
+                      scale: [1, 1.5, 1],
+                      opacity: [0.3, 0.8, 0.3],
+                    }}
+                    transition={{
+                      duration: star.duration,
+                      repeat: Infinity,
+                      delay: star.delay,
+                    }}
+                  />
+                ))}
+              </div>
+            </>
           )}
 
           <div className="absolute top-20 right-10 w-72 h-72 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>

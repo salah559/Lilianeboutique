@@ -32,3 +32,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# replit
+.config
+.cache
+.upm
+.breakpoints
+
+# logs
+*.log
+/tmp/
