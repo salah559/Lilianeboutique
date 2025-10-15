@@ -1,17 +1,29 @@
 import Header from '../components/Header';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 export default function Home(){
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const handleMouseMove = (e) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  const stars = useMemo(() => {
+    return [...Array(50)].map((_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      duration: 2 + Math.random() * 2,
+      delay: Math.random() * 2,
+    }));
   }, []);
 
   const features = [
@@ -27,36 +39,40 @@ export default function Home(){
 
       <main className="relative">
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-          <motion.div 
-            className="absolute inset-0 opacity-30"
-            style={{
-              background: `radial-gradient(circle 600px at ${mousePosition.x}px ${mousePosition.y}px, rgba(168, 85, 247, 0.15), transparent 80%)`
-            }}
-          />
+          {mounted && (
+            <motion.div 
+              className="absolute inset-0 opacity-30"
+              style={{
+                background: `radial-gradient(circle 600px at ${mousePosition.x}px ${mousePosition.y}px, rgba(168, 85, 247, 0.15), transparent 80%)`
+              }}
+            />
+          )}
 
           <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-brandDark to-pink-900/30"></div>
 
-          <div className="absolute inset-0">
-            {[...Array(50)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute w-1 h-1 bg-white rounded-full"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                }}
-                animate={{
-                  scale: [1, 1.5, 1],
-                  opacity: [0.3, 0.8, 0.3],
-                }}
-                transition={{
-                  duration: 2 + Math.random() * 2,
-                  repeat: Infinity,
-                  delay: Math.random() * 2,
-                }}
-              />
-            ))}
-          </div>
+          {mounted && (
+            <div className="absolute inset-0">
+              {stars.map((star) => (
+                <motion.div
+                  key={star.id}
+                  className="absolute w-1 h-1 bg-white rounded-full"
+                  style={{
+                    left: `${star.left}%`,
+                    top: `${star.top}%`,
+                  }}
+                  animate={{
+                    scale: [1, 1.5, 1],
+                    opacity: [0.3, 0.8, 0.3],
+                  }}
+                  transition={{
+                    duration: star.duration,
+                    repeat: Infinity,
+                    delay: star.delay,
+                  }}
+                />
+              ))}
+            </div>
+          )}
 
           <div className="absolute top-20 right-10 w-72 h-72 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
           <div className="absolute bottom-20 left-10 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
