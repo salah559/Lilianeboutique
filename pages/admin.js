@@ -59,8 +59,8 @@ export default function Admin(){
   if(!authed) return (
     <>
       <Header />
-      <main className="min-h-screen flex items-center justify-center p-4 pt-24">
-        <div className="bg-white/10 backdrop-blur-md p-6 md:p-8 rounded-2xl w-full max-w-md shadow-2xl border border-brandGold/20">
+      <main className="min-h-screen flex items-center justify-center p-4">
+        <div className="bg-white/10 backdrop-blur-md p-6 md:p-8 rounded-2xl w-full max-w-md shadow-2xl border border-brandGold/20 mt-20">
           <h2 className="text-2xl md:text-3xl mb-6 text-brandGold font-bold text-center">دخول الأدمن</h2>
           <form onSubmit={login} className="space-y-4">
             <div>
