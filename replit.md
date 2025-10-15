@@ -58,7 +58,7 @@ Lilian Boutique is an Arabic e-commerce website for women's clothing, built with
 ├── pages/
 │   ├── api/
 │   │   ├── admin-auth.js   # Secure admin authentication endpoint
-│   │   └── checkout.js     # Order submission to Supabase
+│   │   └── checkout.js     # Order submission to PostgreSQL via Drizzle
 │   ├── products/
 │   │   └── index.js        # Product listing page
 │   ├── _app.js            # Next.js app wrapper
