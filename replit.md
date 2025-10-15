@@ -22,6 +22,14 @@ Lilian Boutique is an Arabic e-commerce website for women's clothing, built with
 
 ## Recent Changes
 
+### October 15, 2025 - Admin Panel Fixes & Security Improvements
+- **Admin Modal Fix**: Fixed modal positioning using React Portal to display above all content with z-index 9999
+- **Session Management**: Implemented sessionStorage-based authentication with 1-hour expiry
+- **Logout Functionality**: Added logout button to admin dashboard
+- **Security Fix**: Removed password logging from API routes to prevent credential exposure
+- **Auto-restore Auth**: Admin page now auto-restores authentication state from sessionStorage
+- **Improved UX**: Enhanced admin modal design with better styling and error messages
+
 ### October 15, 2025 - Performance & Quality Improvements
 - **React Hydration Fix**: Fixed hydration mismatch errors by using deterministic animations instead of Math.random()
 - **Security Headers**: Added comprehensive security headers (X-Frame-Options, X-Content-Type-Options, CSP-ready)
