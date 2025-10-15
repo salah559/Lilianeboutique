@@ -10,10 +10,10 @@ export default function Header(){
         <h1 className="text-xl font-bold">Lilian Boutique</h1>
       </div>
       <nav>
-        <Link href="/"><a className="mx-3">الرئيسية</a></Link>
-        <Link href="/products"><a className="mx-3">المنتجات</a></Link>
-        <Link href="/about"><a className="mx-3">من نحن</a></Link>
-        <Link href="/contact"><a className="mx-3">تواصل معنا</a></Link>
+        <Link href="/" className="mx-3">الرئيسية</Link>
+        <Link href="/products" className="mx-3">المنتجات</Link>
+        <Link href="/about" className="mx-3">من نحن</Link>
+        <Link href="/contact" className="mx-3">تواصل معنا</Link>
       </nav>
       {show && <AdminModal onClose={()=>setShow(false)} />}
     </header>

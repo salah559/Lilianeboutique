@@ -16,7 +16,7 @@ export default function Products(){
               <div className="h-48 bg-gray-700 mb-3"></div>
               <h3 className="font-semibold">{p.title}</h3>
               <div className="mt-2">{p.price} د.ج</div>
-              <Link href={'/products/'+p.slug}><a className="mt-3 inline-block text-brandGold">عرض المنتج</a></Link>
+              <Link href={'/products/'+p.slug} className="mt-3 inline-block text-brandGold">عرض المنتج</Link>
             </div>
           ))}
         </div>

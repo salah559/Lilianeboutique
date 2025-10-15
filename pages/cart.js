@@ -19,7 +19,7 @@ export default function Cart(){
               </div>
             ))}
             <div className="mt-4">المجموع: {total} د.ج</div>
-            <Link href="/checkout"><a className="mt-3 inline-block text-brandGold">إتمام الطلب</a></Link>
+            <Link href="/checkout" className="mt-3 inline-block text-brandGold">إتمام الطلب</Link>
           </div>
         )}
       </main>

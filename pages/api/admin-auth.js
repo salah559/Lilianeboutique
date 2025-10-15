@@ -9,7 +9,11 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Password required' });
   }
 
-  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  
+  if (!adminPassword) {
+    return res.status(500).json({ error: 'Server configuration error' });
+  }
   
   if (password === adminPassword) {
     return res.status(200).json({ success: true });
