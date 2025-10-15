@@ -1,12 +1,12 @@
 # Lilian Boutique - Replit Project
 
 ## Overview
-Lilian Boutique is an Arabic e-commerce website for women's clothing, built with Next.js and Supabase. This project was successfully migrated from Vercel to Replit on October 15, 2025.
+Lilian Boutique is an Arabic e-commerce website for women's clothing, built with Next.js and PostgreSQL. This project was successfully migrated from Vercel to Replit on October 15, 2025, and migrated from Supabase to Replit's Neon PostgreSQL on October 15, 2025.
 
 ## Project Architecture
 - **Framework**: Next.js 14.2.5 (Pages Router)
 - **Styling**: Tailwind CSS 3.4.1
-- **Database**: Supabase (PostgreSQL)
+- **Database**: Replit Neon PostgreSQL with Drizzle ORM
 - **Animation**: Framer Motion 10.12.16
 - **Language**: Arabic (RTL interface)
 
@@ -21,6 +21,14 @@ Lilian Boutique is an Arabic e-commerce website for women's clothing, built with
 - **Responsive Design**: Mobile-friendly layout with RTL Arabic support
 
 ## Recent Changes
+
+### October 15, 2025 - Database Migration (Supabase → Replit Neon PostgreSQL)
+- **Database Migration**: Migrated from Supabase to Replit's built-in Neon PostgreSQL database
+- **ORM Implementation**: Implemented Drizzle ORM for type-safe database queries
+- **Schema Setup**: Created Drizzle schema matching the original Supabase schema (products, product_variants, variant_images, orders)
+- **API Migration**: Updated checkout API endpoint to use Drizzle instead of Supabase client
+- **Dependency Cleanup**: Removed Supabase dependencies and related configuration files
+- **Database Scripts**: Added `db:generate`, `db:push`, and `db:studio` scripts for database management
 
 ### October 15, 2025 - Major UI/UX Enhancements
 - **Enhanced Homepage**: Modern hero section with gradient backgrounds, animated feature cards, and call-to-action buttons
@@ -62,21 +70,22 @@ Lilian Boutique is an Arabic e-commerce website for women's clothing, built with
 │   └── index.js           # Homepage
 ├── data/
 │   └── algeria-communes.json  # Algerian location data
-├── supabase/
-│   └── schema.sql         # Database schema
+├── server/
+│   ├── db.ts              # Database connection and Drizzle setup
+│   └── schema.ts          # Drizzle schema definitions
+├── drizzle.config.ts      # Drizzle Kit configuration
 └── styles/
     └── globals.css        # Global styles and Tailwind config
 ```
 
 ## Required Environment Variables
 
-The following secrets must be configured in Replit Secrets:
+The following environment variables are automatically configured by Replit:
 
-1. **NEXT_PUBLIC_SUPABASE_URL** - Your Supabase project URL
-2. **SUPABASE_SERVICE_ROLE_KEY** - Supabase service role secret key (server-side only)
-3. **ADMIN_PASSWORD** - Secure password for admin panel access
+1. **DATABASE_URL** - PostgreSQL connection string (automatically set by Replit)
+2. **ADMIN_PASSWORD** - Secure password for admin panel access (set in Replit Secrets)
 
-⚠️ All environment variables are required for the application to function properly.
+⚠️ The DATABASE_URL is automatically provided by Replit's PostgreSQL integration. Only ADMIN_PASSWORD needs to be manually configured.
 
 ## Development
 
@@ -85,6 +94,13 @@ The following secrets must be configured in Replit Secrets:
 npm run dev
 ```
 Server runs on http://0.0.0.0:5000
+
+**Database Management:**
+```bash
+npm run db:generate  # Generate migrations
+npm run db:push      # Push schema to database
+npm run db:studio    # Open Drizzle Studio (database GUI)
+```
 
 **Build for Production:**
 ```bash
@@ -107,8 +123,8 @@ Environment variables from Replit Secrets are automatically available in deploye
 
 ## Next Steps / Future Enhancements
 
-1. **Product Management**: Connect admin panel to Supabase for full product CRUD operations
-2. **Image Hosting**: Configure Cloudinary or Supabase Storage for product images
+1. **Product Management**: Connect admin panel to PostgreSQL for full product CRUD operations
+2. **Image Hosting**: Configure Cloudinary or Replit Object Storage for product images
 3. **Order Management**: Build admin order viewing and status management
 4. **Payment Integration**: Add payment gateway for online transactions
 5. **Email Notifications**: Send order confirmations to customers
@@ -118,6 +134,7 @@ Environment variables from Replit Secrets are automatically available in deploye
 - The application uses Arabic text throughout (RTL layout)
 - Admin access is protected by server-side authentication
 - All dependencies are pinned to specific versions for stability
-- Supabase handles all data persistence (orders, products, etc.)
+- Replit's Neon PostgreSQL handles all data persistence (orders, products, etc.)
+- Database is managed through Drizzle ORM for type-safe queries
 
 Last Updated: October 15, 2025
