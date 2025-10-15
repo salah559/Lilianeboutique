@@ -34,8 +34,8 @@ export default function Admin(){
   if(!authed) return (
     <>
       <Header />
-      <main className="max-w-md mx-auto p-4 md:p-6 mt-8">
-        <div className="glass-dark p-6 md:p-8 rounded-2xl">
+      <main className="min-h-screen flex items-center justify-center p-4">
+        <div className="glass-dark p-6 md:p-8 rounded-2xl w-full max-w-md shadow-2xl">
           <h2 className="text-2xl md:text-3xl mb-6 text-brandGold font-bold text-center">دخول الأدمن</h2>
           <form onSubmit={login} className="space-y-4">
             <input 
@@ -43,17 +43,24 @@ export default function Admin(){
               onChange={e=>setPass(e.target.value)} 
               type="password" 
               placeholder="كلمة المرور" 
-              className="w-full p-3 md:p-4 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-brandGold transition-colors" 
+              className="w-full p-3 md:p-4 bg-white/10 border-2 border-brandGold/30 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-brandGold transition-colors" 
               disabled={loading}
+              required
             />
             <button 
-              className="w-full px-4 py-3 md:py-4 bg-brandGold hover:bg-yellow-600 text-brandDark font-bold rounded-lg transition-colors disabled:opacity-50" 
+              type="submit"
+              className="w-full px-4 py-3 md:py-4 bg-brandGold hover:bg-brandAccent text-brandDark font-bold rounded-xl transition-colors disabled:opacity-50 shadow-lg" 
               disabled={loading}
             >
               {loading ? 'جاري التحميل...' : 'دخول'}
             </button>
           </form>
-          {message && <p className="mt-4 text-red-400 text-center">{message}</p>}
+          {message && (
+            <div className="mt-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg">
+              <p className="text-red-200 text-center text-sm">{message}</p>
+              <p className="text-red-300/70 text-center text-xs mt-2">تأكد من إضافة ADMIN_PASSWORD في Secrets</p>
+            </div>
+          )}
         </div>
       </main>
     </>

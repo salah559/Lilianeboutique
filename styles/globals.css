@@ -3,27 +3,43 @@
 @tailwind utilities;
 
 * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
   scroll-behavior: smooth;
 }
 
 body {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0e17 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #2C1810 0%, #8B4F39 50%, #E8B4B8 100%);
   background-attachment: fixed;
-  color: white;
   min-height: 100vh;
+  color: #FFF8F0;
+  direction: rtl;
+}
+
+.glass-dark {
+  background: rgba(44, 24, 16, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.glass-light {
+  background: rgba(255, 248, 240, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(232, 180, 184, 0.3);
 }
 
 @layer utilities {
   .text-gradient {
     @apply bg-gradient-to-r from-brandGold via-yellow-300 to-brandGold bg-clip-text text-transparent;
   }
-  
+
   .glass {
     @apply bg-white/10 backdrop-blur-md border border-white/20;
-  }
-  
-  .glass-dark {
-    @apply bg-black/20 backdrop-blur-md border border-white/10;
   }
   
   .animate-gradient {
