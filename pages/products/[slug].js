@@ -1,6 +1,6 @@
 import Header from '../../components/Header';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useCart } from '../../components/CartContext';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
@@ -10,31 +10,60 @@ export default function ProductDetail() {
   const { slug } = router.query;
   const { addItem } = useCart();
   
-  const [selectedSize, setSelectedSize] = useState('M');
-  const [selectedColor, setSelectedColor] = useState('');
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [selectedVariant, setSelectedVariant] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
 
-  const allProducts = [
-    { id: '1', title: 'فستان سهرة فاخر', price: 15000, slug: 'evening-dress-luxury', category: 'فساتين', gradient: 'from-pink-500 to-purple-600', description: 'فستان سهرة أنيق مع تفاصيل ذهبية', details: 'فستان سهرة فاخر مصنوع من أجود أنواع الأقمشة، مزين بتطريز ذهبي يدوي. مثالي للمناسبات الخاصة والحفلات.' },
-    { id: '2', title: 'فستان كاجوال عصري', price: 8500, slug: 'casual-dress-modern', category: 'فساتين', gradient: 'from-blue-500 to-cyan-500', description: 'فستان يومي مريح وأنيق', details: 'فستان كاجوال عملي ومريح للاستخدام اليومي، تصميم عصري يجمع بين الأناقة والراحة.' },
-    { id: '3', title: 'عباية مطرزة', price: 12000, slug: 'embroidered-abaya', category: 'عبايات', gradient: 'from-gray-600 to-gray-900', description: 'عباية فاخرة بتطريز يدوي', details: 'عباية فاخرة من قماش فاخر مع تطريز يدوي دقيق، تجمع بين الأصالة والعصرية.' },
-    { id: '4', title: 'جلابة مغربية', price: 9500, slug: 'moroccan-kaftan', category: 'جلابيات', gradient: 'from-amber-500 to-orange-600', description: 'جلابة تقليدية بلمسة عصرية', details: 'جلابة مغربية تقليدية بتصميم عصري، مثالية للمناسبات والأعياد.' },
-    { id: '5', title: 'بلوزة حريرية', price: 6000, slug: 'silk-blouse', category: 'بلوزات', gradient: 'from-rose-500 to-pink-600', description: 'بلوزة أنيقة من الحرير الطبيعي', details: 'بلوزة أنيقة من الحرير الطبيعي 100%، ناعمة ومريحة للارتداء اليومي أو الرسمي.' },
-    { id: '6', title: 'تنورة كلاسيكية', price: 5500, slug: 'classic-skirt', category: 'تنورات', gradient: 'from-indigo-600 to-slate-800', description: 'تنورة رسمية للمناسبات', details: 'تنورة كلاسيكية رسمية مناسبة للعمل والمناسبات الرسمية.' },
-    { id: '7', title: 'فستان أطفال', price: 4500, slug: 'kids-dress', category: 'أطفال', gradient: 'from-pink-400 to-rose-500', description: 'فستان جميل للبنات الصغيرات', details: 'فستان أطفال جميل وملون، مصنوع من قماش مريح وآمن للأطفال.' },
-    { id: '8', title: 'بدلة رسمية', price: 18000, slug: 'formal-suit', category: 'بدلات', gradient: 'from-stone-400 to-amber-700', description: 'بدلة احترافية للعمل', details: 'بدلة نسائية احترافية بقصة أنيقة، مثالية لبيئة العمل والاجتماعات الرسمية.' },
-    { id: '9', title: 'فستان صيفي', price: 7000, slug: 'summer-dress', category: 'فساتين', gradient: 'from-yellow-400 to-orange-500', description: 'فستان خفيف مثالي للصيف', details: 'فستان صيفي خفيف ومريح من قماش قطني يسمح بالتهوية، مثالي للأيام الحارة.' }
-  ];
+  useEffect(() => {
+    if (slug) {
+      fetchProduct();
+    }
+  }, [slug]);
 
-  const product = allProducts.find(p => p.slug === slug);
+  async function fetchProduct() {
+    try {
+      const response = await fetch('/api/products');
+      const data = await response.json();
+      if (data.products) {
+        const foundProduct = data.products.find(p => p.slug === slug);
+        if (foundProduct) {
+          setProduct(foundProduct);
+          if (foundProduct.variants && foundProduct.variants.length > 0) {
+            setSelectedVariant(foundProduct.variants[0]);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching product:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    setSelectedImage(0);
+  }, [selectedVariant]);
+
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <main className="max-w-6xl mx-auto p-6 text-center">
+          <div className="text-brandGold text-2xl">جاري التحميل...</div>
+        </main>
+      </>
+    );
+  }
 
   if (!product) {
     return (
       <>
         <Header />
         <main className="max-w-4xl mx-auto p-6 text-center">
-          <h2 className="text-3xl mb-4">المنتج غير موجود</h2>
+          <h2 className="text-3xl mb-4 text-white">المنتج غير موجود</h2>
           <Link href="/products" className="text-brandGold hover:underline">
             العودة للمنتجات
           </Link>
@@ -43,25 +72,53 @@ export default function ProductDetail() {
     );
   }
 
-  const sizes = ['S', 'M', 'L', 'XL'];
-  const colors = ['أسود', 'أبيض', 'بيج', 'وردي', 'أزرق'];
+  const uniqueColors = [...new Set(product.variants?.map(v => v.color).filter(Boolean))];
+  const uniqueSizes = [...new Set(product.variants?.map(v => v.size).filter(Boolean))];
+
+  const availableVariants = product.variants?.filter(v => {
+    if (selectedVariant?.color && v.color !== selectedVariant.color) return false;
+    if (selectedVariant?.size && v.size !== selectedVariant.size) return false;
+    return true;
+  }) || [];
+
+  const currentImages = selectedVariant?.images || [];
 
   const handleAddToCart = () => {
-    if (!selectedColor) {
-      alert('الرجاء اختيار اللون');
+    if (!selectedVariant) {
+      alert('الرجاء اختيار المقاس واللون');
       return;
     }
     
     addItem({
       title: product.title,
       price: product.price,
-      size: selectedSize,
-      color: selectedColor,
-      qty: quantity
+      size: selectedVariant.size,
+      color: selectedVariant.color,
+      variantId: selectedVariant.id,
+      qty: quantity,
+      image: currentImages[0] || null
     });
     
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
+  };
+
+  const selectColor = (color) => {
+    const variant = product.variants?.find(v => 
+      v.color === color && (!selectedVariant?.size || v.size === selectedVariant.size)
+    );
+    if (variant) {
+      setSelectedVariant(variant);
+    }
+  };
+
+  const selectSize = (size) => {
+    const variant = product.variants?.find(v => 
+      v.size === size && (!selectedVariant?.color || v.color === selectedVariant.color)
+    );
+    if (variant) {
+      setSelectedVariant(variant);
+    }
   };
 
   return (
@@ -76,12 +133,42 @@ export default function ProductDetail() {
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className={`aspect-square bg-gradient-to-br ${product.gradient} rounded-2xl shadow-2xl relative overflow-hidden`}
+            className="space-y-4"
           >
-            <div className="absolute inset-0 bg-black/10"></div>
-            <div className="absolute top-4 right-4 bg-brandGold text-brandDark px-4 py-2 rounded-full font-bold">
-              {product.category}
+            <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl relative overflow-hidden">
+              {currentImages.length > 0 ? (
+                <img 
+                  src={currentImages[selectedImage]} 
+                  alt={product.title}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center text-white/50">
+                  لا توجد صورة
+                </div>
+              )}
+              {product.category && (
+                <div className="absolute top-4 right-4 bg-brandGold text-brandDark px-4 py-2 rounded-full font-bold">
+                  {product.category}
+                </div>
+              )}
             </div>
+
+            {currentImages.length > 1 && (
+              <div className="flex gap-2 overflow-x-auto pb-2">
+                {currentImages.map((img, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setSelectedImage(idx)}
+                    className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
+                      selectedImage === idx ? 'border-brandGold' : 'border-transparent'
+                    }`}
+                  >
+                    <img src={img} alt="" className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
           </motion.div>
 
           <motion.div
@@ -91,51 +178,63 @@ export default function ProductDetail() {
           >
             <h1 className="text-4xl font-bold mb-4 text-white">{product.title}</h1>
             <div className="text-3xl font-bold text-brandGold mb-6">
-              {product.price.toLocaleString()} د.ج
+              {parseFloat(product.price).toLocaleString()} د.ج
             </div>
             
-            <p className="text-white/80 text-lg mb-6 leading-relaxed">
-              {product.details}
-            </p>
+            {product.description && (
+              <p className="text-white/80 text-lg mb-6 leading-relaxed">
+                {product.description}
+              </p>
+            )}
 
             <div className="space-y-6">
-              <div>
-                <label className="block text-white/90 mb-2 font-semibold">المقاس:</label>
-                <div className="flex gap-3">
-                  {sizes.map(size => (
-                    <button
-                      key={size}
-                      onClick={() => setSelectedSize(size)}
-                      className={`px-6 py-2 rounded-lg font-semibold transition-all ${
-                        selectedSize === size
-                          ? 'bg-brandGold text-brandDark'
-                          : 'bg-white/10 text-white hover:bg-white/20'
-                      }`}
-                    >
-                      {size}
-                    </button>
-                  ))}
+              {uniqueColors.length > 0 && (
+                <div>
+                  <label className="block text-white/90 mb-2 font-semibold">اللون:</label>
+                  <div className="flex gap-3 flex-wrap">
+                    {uniqueColors.map(color => (
+                      <button
+                        key={color}
+                        onClick={() => selectColor(color)}
+                        className={`px-5 py-2 rounded-lg font-semibold transition-all ${
+                          selectedVariant?.color === color
+                            ? 'bg-brandGold text-brandDark'
+                            : 'bg-white/10 text-white hover:bg-white/20'
+                        }`}
+                      >
+                        {color}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
-              <div>
-                <label className="block text-white/90 mb-2 font-semibold">اللون:</label>
-                <div className="flex gap-3 flex-wrap">
-                  {colors.map(color => (
-                    <button
-                      key={color}
-                      onClick={() => setSelectedColor(color)}
-                      className={`px-5 py-2 rounded-lg font-semibold transition-all ${
-                        selectedColor === color
-                          ? 'bg-brandGold text-brandDark'
-                          : 'bg-white/10 text-white hover:bg-white/20'
-                      }`}
-                    >
-                      {color}
-                    </button>
-                  ))}
+              {uniqueSizes.length > 0 && (
+                <div>
+                  <label className="block text-white/90 mb-2 font-semibold">المقاس:</label>
+                  <div className="flex gap-3">
+                    {uniqueSizes.map(size => (
+                      <button
+                        key={size}
+                        onClick={() => selectSize(size)}
+                        className={`px-6 py-2 rounded-lg font-semibold transition-all ${
+                          selectedVariant?.size === size
+                            ? 'bg-brandGold text-brandDark'
+                            : 'bg-white/10 text-white hover:bg-white/20'
+                        }`}
+                      >
+                        {size}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {selectedVariant && (
+                <div className="text-white/70 text-sm">
+                  الكمية المتوفرة: {selectedVariant.stock || 0}
+                </div>
+              )}
 
               <div>
                 <label className="block text-white/90 mb-2 font-semibold">الكمية:</label>
@@ -146,7 +245,7 @@ export default function ProductDetail() {
                   >
                     -
                   </button>
-                  <span className="text-2xl font-bold w-12 text-center">{quantity}</span>
+                  <span className="text-2xl font-bold w-12 text-center text-white">{quantity}</span>
                   <button
                     onClick={() => setQuantity(quantity + 1)}
                     className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg font-bold text-xl"
@@ -158,13 +257,22 @@ export default function ProductDetail() {
 
               <button
                 onClick={handleAddToCart}
+                disabled={!selectedVariant || selectedVariant.stock === 0}
                 className={`w-full py-4 rounded-xl font-bold text-lg transition-all ${
                   added
                     ? 'bg-green-500 text-white'
-                    : 'bg-brandGold text-brandDark hover:bg-yellow-400 transform hover:scale-105'
+                    : selectedVariant && selectedVariant.stock > 0
+                    ? 'bg-brandGold text-brandDark hover:bg-yellow-400 transform hover:scale-105'
+                    : 'bg-gray-500 text-gray-300 cursor-not-allowed'
                 }`}
               >
-                {added ? '✓ تمت الإضافة للسلة' : 'أضف للسلة'}
+                {!selectedVariant 
+                  ? 'اختر المقاس واللون' 
+                  : selectedVariant.stock === 0
+                  ? 'غير متوفر'
+                  : added 
+                  ? '✓ تمت الإضافة للسلة' 
+                  : 'أضف للسلة'}
               </button>
 
               <Link

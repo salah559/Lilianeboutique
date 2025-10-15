@@ -12,7 +12,7 @@ export const products = pgTable('products', {
 
 export const productVariants = pgTable('product_variants', {
   id: uuid('id').primaryKey().defaultRandom(),
-  productId: uuid('product_id').references(() => products.id, { onDelete: 'cascade' }),
+  productId: uuid('product_id').references(() => products.id, { onDelete: 'cascade' }).notNull(),
   size: text('size'),
   color: text('color'),
   sku: text('sku'),
@@ -21,7 +21,7 @@ export const productVariants = pgTable('product_variants', {
 
 export const variantImages = pgTable('variant_images', {
   id: uuid('id').primaryKey().defaultRandom(),
-  variantId: uuid('variant_id').references(() => productVariants.id, { onDelete: 'cascade' }),
+  variantId: uuid('variant_id').references(() => productVariants.id, { onDelete: 'cascade' }).notNull(),
   url: text('url').notNull(),
   position: integer('position').default(0),
 });

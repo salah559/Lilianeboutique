@@ -13,11 +13,13 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
+    "@replit/object-storage": "^1.0.0",
     "@swc/helpers": "^0.5.17",
     "autoprefixer": "10.4.20",
     "drizzle-kit": "^0.31.5",
     "drizzle-orm": "^0.44.6",
     "framer-motion": "10.12.16",
+    "multer": "^2.0.2",
     "next": "14.2.5",
     "postcss": "8.4.38",
     "postgres": "^3.4.7",

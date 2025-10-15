@@ -110,7 +110,11 @@ export default function Cart(){
                         whileHover={{ scale: 1.05 }}
                         transition={{ type: "spring", stiffness: 300 }}
                       >
-                        <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
+                        {item.image ? (
+                          <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
+                        )}
                       </motion.div>
                       
                       <div className="flex-grow">
