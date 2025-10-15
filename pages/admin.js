@@ -34,13 +34,27 @@ export default function Admin(){
   if(!authed) return (
     <>
       <Header />
-      <main className="max-w-md mx-auto p-6">
-        <h2 className="text-2xl mb-4">دخول الأدمن</h2>
-        <form onSubmit={login}>
-          <input value={pass} onChange={e=>setPass(e.target.value)} type="password" placeholder="كلمة المرور" className="w-full p-2 mb-3" disabled={loading}/>
-          <button className="px-3 py-1 bg-yellow-500" disabled={loading}>{loading ? 'جاري التحميل...' : 'دخول'}</button>
-        </form>
-        <p className="mt-3 text-red-400">{message}</p>
+      <main className="max-w-md mx-auto p-4 md:p-6 mt-8">
+        <div className="glass-dark p-6 md:p-8 rounded-2xl">
+          <h2 className="text-2xl md:text-3xl mb-6 text-brandGold font-bold text-center">دخول الأدمن</h2>
+          <form onSubmit={login} className="space-y-4">
+            <input 
+              value={pass} 
+              onChange={e=>setPass(e.target.value)} 
+              type="password" 
+              placeholder="كلمة المرور" 
+              className="w-full p-3 md:p-4 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-brandGold transition-colors" 
+              disabled={loading}
+            />
+            <button 
+              className="w-full px-4 py-3 md:py-4 bg-brandGold hover:bg-yellow-600 text-brandDark font-bold rounded-lg transition-colors disabled:opacity-50" 
+              disabled={loading}
+            >
+              {loading ? 'جاري التحميل...' : 'دخول'}
+            </button>
+          </form>
+          {message && <p className="mt-4 text-red-400 text-center">{message}</p>}
+        </div>
       </main>
     </>
   );

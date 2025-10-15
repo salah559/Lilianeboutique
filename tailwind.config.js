@@ -3,8 +3,10 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        brandGold: '#c69e2e',
-        brandDark: '#0f1724',
+        brandGold: '#D4AF37',
+        brandDark: '#1a1a2e',
+        brandAccent: '#16213e',
+        brandLight: '#f5f5f5',
       }
     },
   },
