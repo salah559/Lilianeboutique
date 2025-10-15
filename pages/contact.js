@@ -1,0 +1,1 @@
+import Header from '../components/Header'; export default function Contact(){ return (<><Header /><main className='max-w-4xl mx-auto p-6'><h2 className='text-2xl'>تواصل معنا</h2><p className='mt-3'>البريد: info@lilianboutique.example</p></main></>);}

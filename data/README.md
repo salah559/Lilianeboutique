@@ -1,0 +1,1 @@
+This folder contains a small sample. Download the full JSON of Algerian wilayas & communes from: https://github.com/othmanus/algeria-cities and place it here as algeria-communes.json

@@ -1,0 +1,1 @@
+import Header from '../components/Header'; export default function About(){ return (<><Header /><main className='max-w-4xl mx-auto p-6'><h2 className='text-2xl'>من نحن</h2><p className='mt-3'>متجر Lilian Boutique لملابس النساء والأطفال.</p></main></>);}
